@@ -12,8 +12,4 @@ RUN apt-get install -y git make
 
 RUN apt-get install -y default-mysql-client
 
-# Copie ton script d’attente
-COPY wait-for-it.sh /usr/local/bin/wait-for-it.sh
-RUN chmod +x /usr/local/bin/wait-for-it.sh
-
 USER jenkins
