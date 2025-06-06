@@ -27,7 +27,7 @@ pipeline {
 			steps {
 				echo "🧪 Lancement des tests avec pytest"
               sh '''
-                source venv/bin/activate || source venv/Scripts/activate
+                . venv/bin/activate || source venv/Scripts/activate
                 pip install pytest
                 pytest
               '''
