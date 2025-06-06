@@ -1,6 +1,6 @@
 
 DB_CONFIG = {
-    'host': 'localhost',
+    'host': 'db',
     'port': 3306,
     'user': 'flaskuser',
     'password': 'flaskpass',

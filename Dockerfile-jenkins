@@ -8,4 +8,6 @@ RUN apt-get update && \
     ln -s /usr/bin/python3 /usr/bin/python && \
     pip3 install --upgrade pip --break-system-packages
 
+RUN apt-get install -y git make
+
 USER jenkins
