@@ -2,28 +2,10 @@ FROM jenkins/jenkins:lts
 
 USER root
 
-# ARG to receive the GID from docker-compose
-ARG DOCKER_GID
-
-# Install dependencies in a single layer
+# Installer Python + pip + venv
 RUN apt-get update && \
-    apt-get install -y python3 python3-pip python3-venv docker.io docker-compose git make default-mysql-client && \
-    rm -rf /var/lib/apt/lists/*
-
-# Link python3 to python and upgrade pip
-RUN ln -s /usr/bin/python3 /usr/bin/python && \
+    apt-get install -y python3 python3-pip python3-venv && \
+    ln -s /usr/bin/python3 /usr/bin/python && \
     pip3 install --upgrade pip --break-system-packages
-
-# If a GID is provided, create the 'docker' group with that GID
-# and add the 'jenkins' user to it. This is crucial for allowing
-# Jenkins to communicate with the Docker daemon on the host.
-RUN if [ ! -z "$DOCKER_GID" ]; then \
-    if ! getent group docker > /dev/null; then \
-    groupadd -g "$DOCKER_GID" docker; \
-    else \
-    groupmod -g "$DOCKER_GID" docker; \
-    fi && \
-    usermod -aG docker jenkins; \
-    fi
 
 USER jenkins
