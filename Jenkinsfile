@@ -9,48 +9,30 @@ pipeline {
       }
     }
 
-        stage('Install Python') {
-  steps {
-    echo "📦 Installation des dépendances"
-    sh '''
-      python --version
-      python -m venv venv
-      . venv/bin/activate
-      pip install --upgrade pip
-      pip install flask mysql-connector-python
-    '''
-  }
-}
-
-
-   stage('Tests') {
+        stage('Tests') {
 			steps {
-				echo "🧪 Lancement des tests avec pytest"
-              sh '''
-                . venv/bin/activate || source venv/Scripts/activate
-                pip install pytest
-                pytest
-              '''
-            }
-   }
+				echo "🧪 Lancement des tests avec docker-compose"
+				sh '''
+					docker-compose up --build -d db
+					echo "Attente de la base de données..."
+					sleep 15
+					docker-compose run --rm app pytest
+				'''
+			}
+		}
 
-
-
-
-		stage('Build/Run') {
-					steps {
-						echo "🚀 Lancement de l'application"
-			sh '''
-			  . venv/bin/activate
-			  python run.py &
-			  sleep 5
-			'''
-		  }
+		stage('Build Image') {
+			steps {
+				echo "📦 Construction de l'image de l'application"
+				sh 'docker-compose build app'
+			}
 		}
 
   }
   post {
 		always {
+			echo "🧹 Nettoyage des conteneurs"
+			sh 'docker-compose down -v --remove-orphans'
 			echo "🎯 Pipeline terminé"
     }
   }
