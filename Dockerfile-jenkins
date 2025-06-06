@@ -14,13 +14,16 @@ RUN apt-get update && \
 RUN ln -s /usr/bin/python3 /usr/bin/python && \
     pip3 install --upgrade pip --break-system-packages
 
-# Modify the GID of the docker group to match the host's GID, if provided.
-# The docker.io package creates the 'docker' group.
-RUN if getent group docker > /dev/null && [ ! -z "$DOCKER_GID" ]; then \
+# If a GID is provided, create the 'docker' group with that GID
+# and add the 'jenkins' user to it. This is crucial for allowing
+# Jenkins to communicate with the Docker daemon on the host.
+RUN if [ ! -z "$DOCKER_GID" ]; then \
+    if ! getent group docker > /dev/null; then \
+    groupadd -g "$DOCKER_GID" docker; \
+    else \
     groupmod -g "$DOCKER_GID" docker; \
+    fi && \
+    usermod -aG docker jenkins; \
     fi
-
-# Add jenkins user to the newly modified docker group
-RUN usermod -aG docker jenkins
 
 USER jenkins
