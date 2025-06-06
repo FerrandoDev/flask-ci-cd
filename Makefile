@@ -13,5 +13,5 @@ test:
 run:
 	python run.py
 
-dcub:
+dc:
 	docker compose up -d --build

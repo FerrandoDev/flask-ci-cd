@@ -1,5 +1,12 @@
 # Projet CI/CD : API Flask + MySQL via Jenkins
 
+## Pré-requis
+- docker
+- docker desktop
+- python
+- make (pour utiliser les commandes du Makefile)
+- Ngrok (pour exposer son port jenkins pour utilser les webhooks github)
+
 ## Contexte
 Ce projet a pour objectif de développer une API REST en Python (Flask) qui lit des articles depuis une base de données MySQL, puis de mettre en place un pipeline CI/CD automatisé via Jenkins.
 
@@ -34,7 +41,7 @@ Ce projet a pour objectif de développer une API REST en Python (Flask) qui lit 
    ```
 Lancer MySQL en local (si vous voulez tester la BDD) :
 
-`docker-compose up -d db`
+`docker-compose up -d`
 
 Initialiser la BDD (script init.sql dans mysql-init/).
 
@@ -55,11 +62,11 @@ config.py contient :
 
 ````
 DB_CONFIG = {
-    "host": "db",
-    "user": "flaskuser",
-    "password": "flaskpass",
-    "database": "flaskdb",
-    "port": 3306
+    'host': 'localhost',
+    'port': 3306,
+    'user': 'flaskuser',
+    'password': 'flaskpass',
+    'database': 'flask_db_test_cicd'
 }
 ````
 
