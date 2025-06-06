@@ -29,8 +29,6 @@ pipeline {
               sh '''
                 . venv/bin/activate || source venv/Scripts/activate
                 pip install pytest
-                chmod +x wait-for-it.sh
-  				./wait-for-it.sh db pytest
                 pytest
               '''
             }
