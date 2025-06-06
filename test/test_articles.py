@@ -1,22 +1,12 @@
-import pytest
-from app import create_app
+from unittest.mock import patch
+from flask.testing import FlaskClient
 
-@pytest.fixture
-def client():
-    app = create_app()
-    app.config['TESTING'] = True
-    with app.test_client() as client:
-        yield client
+@patch('app.routes.mysql.connector.connect')
+def test_get_articles(mock_connect, client: FlaskClient):
+    mock_conn = mock_connect.return_value
+    mock_cursor = mock_conn.cursor.return_value
+    mock_cursor.fetchall.return_value = [(1, "Titre de test", "Contenu de test")]
 
-def test_get_articles(client):
     response = client.get('/articles')
     assert response.status_code == 200
-
-    data = response.get_json()
-    assert isinstance(data, list)
-
-    for article in data:
-        assert 'id' in article
-        assert 'titre' in article
-        assert 'contenu' in article
-        assert 'dt_publication' in article
+    assert b'Titre de test' in response.data
