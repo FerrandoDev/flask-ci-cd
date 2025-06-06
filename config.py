@@ -1,7 +1,9 @@
+import os
+
 DB_CONFIG = {
-    "host": "db",
-    "user": "flaskuser",
-    "password": "flaskpass",
-    "database": "flaskdb",
-    "port": 3306
+    "host": os.getenv("DB_HOST", "localhost"),
+    "user": os.getenv("DB_USER", "flaskuser"),
+    "password": os.getenv("DB_PASSWORD", "flaskpass"),
+    "database": os.getenv("DB_NAME", "flaskdb"),
+    "port": int(os.getenv("DB_PORT", 3306))
 }
