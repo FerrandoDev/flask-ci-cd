@@ -12,3 +12,17 @@ services:
       - "3306:3306"
     volumes:
       - ./mysql-init:/docker-entrypoint-initdb.d
+
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: jenkins
+    ports:
+      - "8080:8080"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+    user: root
+    restart: unless-stopped
+
+volumes:
+  jenkins_home:
