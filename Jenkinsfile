@@ -22,6 +22,7 @@ pipeline {
   }
 }
 
+
    stage('Tests') {
 			steps {
 				echo "🧪 Lancement des tests avec pytest"
