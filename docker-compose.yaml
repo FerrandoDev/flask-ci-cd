@@ -13,16 +13,18 @@ services:
     volumes:
       - ./mysql-init:/docker-entrypoint-initdb.d
 
+
   jenkins:
-    image: jenkins/jenkins:lts
-    container_name: jenkins
+    build:
+      context: .
+      dockerfile: Dockerfile-jenkins
+    container_name: jenkins-python
     ports:
       - "8080:8080"
     volumes:
       - jenkins_home:/var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
     user: root
-    restart: unless-stopped
 
 volumes:
   jenkins_home:

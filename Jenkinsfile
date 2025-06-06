@@ -9,18 +9,18 @@ pipeline {
       }
     }
 
-    stage('Install Python') {
-			steps {
-				echo "📦 Installation des dépendances"
-        sh '''
-          python --version
-          python -m venv venv
-          source venv/bin/activate || source venv/Scripts/activate
-          pip install --upgrade pip
-          pip install flask mysql-connector-python
-        '''
-      }
-    }
+        stage('Install Python') {
+  steps {
+    echo "📦 Installation des dépendances"
+    sh '''
+      python --version
+      python -m venv venv
+      . venv/bin/activate
+      pip install --upgrade pip
+      pip install flask mysql-connector-python
+    '''
+  }
+}
 
    stage('Tests') {
 			steps {
@@ -34,18 +34,20 @@ pipeline {
    }
 
 
-    stage('Build/Run') {
-			steps {
-				echo "🚀 Lancement de l'application"
-        sh '''
-          source venv/bin/activate || source venv/Scripts/activate
-          python run.py &
-          sleep 5
-        '''
-      }
-    }
-  }
 
+
+		stage('Build/Run') {
+					steps {
+						echo "🚀 Lancement de l'application"
+			sh '''
+			  . venv/bin/activate
+			  python run.py &
+			  sleep 5
+			'''
+		  }
+		}
+
+  }
   post {
 		always {
 			echo "🎯 Pipeline terminé"
